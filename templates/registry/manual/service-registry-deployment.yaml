@@ -1,0 +1,112 @@
+---
+# Services for the components
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: service-registry
+    template: service-registry
+  name: service-registry
+spec:
+  selector:
+    app: service-registry
+  ports:
+    - port: 8080
+      protocol: TCP
+      targetPort: 8080
+  sessionAffinity: None
+status:
+  loadBalancer: {}
+
+---
+# Route
+apiVersion: v1
+kind: Route
+metadata:
+  name: service-registry
+  labels:
+    app: service-registry
+    template: service-registry
+spec:
+  to:
+    kind: Service
+    name: service-registry
+    weight: 100
+  wildcardPolicy: None
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: service-registry
+  labels:
+    app: service-registry
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: registry
+  template:
+    metadata:
+      labels:
+        app: service-registry
+        name: registry
+    spec:
+      containers:
+        - image: CONTAINER_IMAGE_PLACEHOLDER
+          imagePullPolicy: Always
+          name: service-registry
+          ports:
+            - containerPort: 8080
+              protocol: TCP
+          env:
+            - name: QUARKUS_DATASOURCE_USERNAME
+              value: apicurio-registry
+            - name: QUARKUS_DATASOURCE_PASSWORD
+              value: password
+            - name: ENV_NAME_PLACEHOLDER
+              value: ENV_VALUE_PLACEHOLDER
+            - name: QUARKUS_PROFILE
+              value: prod
+            - name: LOG_LEVEL
+              value: LOG_LEVEL_PLACEHOLDER
+            - name: APPLICATION_ID
+              value: registry-application
+            - name: POD_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+            - name: APPLICATION_SERVER_HOST
+              value: "$(POD_IP)"
+            - name: APPLICATION_SERVER_PORT
+              value: "9000"
+          resources:
+            limits:
+              cpu: 1000m
+              memory: 1300Mi
+            requests:
+              cpu: 200m
+              memory: 600Mi
+          livenessProbe:
+            httpGet:
+              path: /health/live
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 5
+            timeoutSeconds: 5
+            periodSeconds: 10
+            successThreshold: 1
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /health/ready
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 5
+            timeoutSeconds: 5
+            periodSeconds: 10
+            successThreshold: 1
+            failureThreshold: 3
+          terminationMessagePath: /dev/termination-log
+  strategy:
+    type: Recreate

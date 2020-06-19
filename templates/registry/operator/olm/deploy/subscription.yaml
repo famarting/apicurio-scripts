@@ -1,0 +1,14 @@
+apiVersion: operators.coreos.com/v1alpha1
+kind: Subscription
+metadata:
+  name: service-registry-sub
+  namespace: OPERATOR_NAMESPACE
+  labels:
+    app: service-registry
+spec:
+  name: service-registry-operator
+  source: service-registry-catalog
+  sourceNamespace: OPERATOR_NAMESPACE
+  startingCSV: STARTING_CSV
+  channel: CHANNEL_PLACEHOLDER
+  installPlanApproval: Automatic

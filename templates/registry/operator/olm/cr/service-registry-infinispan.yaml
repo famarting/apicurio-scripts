@@ -1,0 +1,10 @@
+apiVersion: apicur.io/v1alpha1
+kind: ApicurioRegistry
+metadata:
+  name: apicurio-registry-infinispan
+spec:
+  configuration:
+    logLevel: LOG_LEVEL_PLACEHOLDER
+    persistence: infinispan
+    infinispan:
+      clusterName: registry-application

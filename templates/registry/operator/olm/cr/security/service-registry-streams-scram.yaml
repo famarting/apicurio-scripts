@@ -1,0 +1,16 @@
+apiVersion: apicur.io/v1alpha1
+kind: ApicurioRegistry
+metadata:
+  name: apicurio-registry-streams
+spec:
+  configuration:
+    logLevel: LOG_LEVEL_PLACEHOLDER
+    persistence: streams
+    streams:
+      applicationId: registry-application
+      bootstrapServers: BOOTSTRAP_SERVERS_PLACEHOLDER
+      security:
+        scram:
+          user: USER_PLACEHOLDER
+          passwordSecretName: PASSWORD_SECRET_PLACEHOLDER
+          truststoreSecretName: TRUSTSTORE_SECRET_PLACEHOLDER

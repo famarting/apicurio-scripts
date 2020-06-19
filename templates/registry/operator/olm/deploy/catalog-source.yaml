@@ -1,0 +1,12 @@
+apiVersion: operators.coreos.com/v1alpha1
+kind: CatalogSource
+metadata:
+  name: service-registry-catalog
+  namespace: OPERATOR_NAMESPACE
+  labels:
+    app: service-registry
+spec:
+  displayName: Service Registry Operator Source
+  image: METADATA_IMAGE
+  publisher: service-registry-qe
+  sourceType: grpc

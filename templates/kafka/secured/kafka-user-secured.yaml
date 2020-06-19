@@ -1,0 +1,9 @@
+apiVersion: kafka.strimzi.io/v1beta1
+kind: KafkaUser
+metadata:
+  name: registry-user-secured
+  labels:
+    strimzi.io/cluster: my-cluster
+spec:
+  authentication:
+    type: AUTH_TYPE_PLACEHOLDER
